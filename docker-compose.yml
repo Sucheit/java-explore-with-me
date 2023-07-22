@@ -35,7 +35,7 @@ services:
     volumes:
       - /var/lib/postgresql/data/
     ports:
-      - "6541:5432"
+      - "6542:5432"
     environment:
       POSTGRES_DB: ewm-db
       POSTGRES_USER: user
