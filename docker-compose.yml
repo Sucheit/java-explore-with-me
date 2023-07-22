@@ -1,6 +1,6 @@
 version: '3.1'
 services:
-  statistics-server:
+  stats-server:
     build: statistics/statistics-server
 
     ports:
@@ -21,7 +21,7 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
 
-  main-service:
+  ewm-service:
     build: main-service
     ports:
       - "8080:8080"
