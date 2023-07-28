@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>statistics</artifactId>
-    <packaging>pom</packaging>
+
     <modules>
         <module>statistics-server</module>
         <module>statistics-client</module>
