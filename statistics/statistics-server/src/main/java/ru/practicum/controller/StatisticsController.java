@@ -28,8 +28,9 @@ public class StatisticsController {
     public ResponseEntity<String> createEndpointHit(
             @RequestBody @Valid EndpointHitDto endpointHitDto
     ) {
+        log.info("POST /hit request: {}", endpointHitDto);
         statisticsService.createEndpointHit(endpointHitDto);
-        log.info("Создали EndpointHit: {}", endpointHitDto);
+        log.info("POST /hit completed");
         return new ResponseEntity<>("Информация сохранена", HttpStatus.CREATED);
     }
 
@@ -40,8 +41,9 @@ public class StatisticsController {
             @RequestParam(required = false) List<String> uris,
             @RequestParam(defaultValue = "false") Boolean unique
     ) {
+        log.info("GET /stats request: start={}, end={}, uris={}, uniques={}", start, end, uris, unique);
         List<ViewStatsDto> viewStatsDtos = statisticsService.getStatistics(start, end, uris, unique);
-        log.info("Получили статистику: {}", viewStatsDtos);
+        log.info("GET /stats completed: {}", viewStatsDtos);
         return viewStatsDtos;
     }
 

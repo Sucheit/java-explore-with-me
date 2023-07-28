@@ -2,7 +2,7 @@ version: '3.1'
 services:
   stats-server:
     build: statistics/statistics-server
-
+    container_name: statistics-server_container
     ports:
       - "9090:9090"
     depends_on:
@@ -12,8 +12,6 @@ services:
 
   stats-db:
     image: postgres:14-alpine
-    volumes:
-      - /var/lib/postgresql/data/
     ports:
       - "6541:5432"
     environment:
@@ -23,6 +21,7 @@ services:
 
   ewm-service:
     build: main-service
+    container_name: main-service_container
     ports:
       - "8080:8080"
     depends_on:
@@ -32,8 +31,6 @@ services:
 
   ewm-db:
     image: postgres:14-alpine
-    volumes:
-      - /var/lib/postgresql/data/
     ports:
       - "6542:5432"
     environment:
