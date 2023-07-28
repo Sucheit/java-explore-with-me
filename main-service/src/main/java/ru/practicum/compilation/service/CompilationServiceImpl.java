@@ -44,6 +44,7 @@ public class CompilationServiceImpl implements CompilationService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     private List<EventShortDto> getEventShortDtoList(Compilation compilation) {
         return compilation.getEvents().stream()
                 .map(event -> eventService.findEventFullDtoById(event.getId()))
@@ -51,17 +52,20 @@ public class CompilationServiceImpl implements CompilationService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public CompilationDto getCompilationDtoById(int compId) {
         Compilation compilation = getCompilationById(compId);
         return mapToCompilationDto(compilation, getEventShortDtoList(compilation));
     }
 
+    @Transactional(readOnly = true)
     private Compilation getCompilationById(int compId) {
         return compilationRepository.findById(compId).orElseThrow(
                 () -> new NotFoundException(String.format("Compilation with id=%s was not found", compId)));
     }
 
+    @Transactional
     @Override
     public CompilationDto createCompilation(NewCompilationDto newCompilationDto) {
         List<Event> events = eventRepository.findByIdIn(newCompilationDto.getEvents());
@@ -69,12 +73,14 @@ public class CompilationServiceImpl implements CompilationService {
         return mapToCompilationDto(compilation, getEventShortDtoList(compilation));
     }
 
+    @Transactional
     @Override
     public void deleteCompilation(int comId) {
         getCompilationById(comId);
         compilationRepository.deleteById(comId);
     }
 
+    @Transactional
     @Override
     public CompilationDto patchCompilation(int comId, UpdateCompilationRequest updateCompilationRequest) {
         Compilation compilation = getCompilationById(comId);
