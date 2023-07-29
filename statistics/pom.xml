@@ -13,9 +13,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>statistics-server</module>
-        <module>statistics-client</module>
         <module>shared-dto</module>
+        <module>statistics-client</module>
+        <module>statistics-server</module>
     </modules>
 
     <properties>
