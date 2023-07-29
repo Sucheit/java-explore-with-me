@@ -16,9 +16,6 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <querydsl.version>5.0.0</querydsl.version>
-        <apt-maven-plugin.verion>1.1.3</apt-maven-plugin.verion>
-        <postgresql.version>42.3.8</postgresql.version>
     </properties>
 
     <dependencies>
@@ -40,7 +37,6 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>${postgresql.version}</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -64,7 +60,6 @@
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
-            <version>${querydsl.version}</version>
         </dependency>
 
         <dependency>
@@ -94,7 +89,6 @@
             <plugin>
                 <groupId>com.mysema.maven</groupId>
                 <artifactId>apt-maven-plugin</artifactId>
-                <version>${apt-maven-plugin.verion}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -111,7 +105,6 @@
                     <dependency>
                         <groupId>com.querydsl</groupId>
                         <artifactId>querydsl-apt</artifactId>
-                        <version>${querydsl.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
