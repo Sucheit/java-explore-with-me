@@ -10,7 +10,6 @@
     </parent>
 
     <artifactId>statistics-client</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
 
     <name>statistics-client</name>
 
