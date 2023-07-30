@@ -12,6 +12,7 @@
     <artifactId>stats-client</artifactId>
 
     <name>statistics-client</name>
+    <description>клиент статистики</description>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>

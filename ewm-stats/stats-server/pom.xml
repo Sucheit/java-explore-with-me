@@ -12,6 +12,7 @@
     <artifactId>stats-server</artifactId>
 
     <name>statistics-server</name>
+    <description>сервер сбора статистики</description>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>

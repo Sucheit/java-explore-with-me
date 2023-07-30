@@ -12,6 +12,7 @@
     <artifactId>shared-dto</artifactId>
 
     <name>shared-dto</name>
+    <description>дто для модуля статистики</description>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>

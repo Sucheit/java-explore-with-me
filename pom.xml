@@ -11,6 +11,9 @@
     </parent>
 
     <name>Explore With Me</name>
+    <description>Сервис позволяющий пользователям делиться информацией об интересных событиях
+        и находить компанию для участия в них
+    </description>
 
     <modules>
         <module>ewm-main</module>

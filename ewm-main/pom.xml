@@ -12,6 +12,7 @@
     <artifactId>ewm-main</artifactId>
 
     <name>ewm-main</name>
+    <description>Основной сервис Explore-with-me</description>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
