@@ -9,13 +9,13 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>statistics</artifactId>
+    <artifactId>ewm-stats</artifactId>
     <packaging>pom</packaging>
 
     <modules>
         <module>shared-dto</module>
-        <module>statistics-client</module>
-        <module>statistics-server</module>
+        <module>stats-client</module>
+        <module>stats-server</module>
     </modules>
 
     <properties>

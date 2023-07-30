@@ -1,11 +1,11 @@
 version: '3.1'
 services:
-  stats-server:
+  ewm-stats:
     build:
-      context: ./statistics/statistics-server
+      context: ./ewm-stats/stats-server
       dockerfile: Dockerfile
-    image: statistics-server
-    container_name: statistics-server-container
+    image: stats-server
+    container_name: stats-server-container
     ports:
       - "9090:9090"
     depends_on:
@@ -24,17 +24,17 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
 
-  main-service:
+  ewm-main:
     build:
-      context: ./main-service
+      context: ./ewm-main
       dockerfile: Dockerfile
-    image: main-service
-    container_name: main-service-container
+    image: ewm-main
+    container_name: ewm-main-container
     ports:
       - "8080:8080"
     depends_on:
       - ewm-db
-      - stats-server
+      - ewm-stats
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://ewm-db:5432/ewm-db
       SPRING_DATASOURCE_USERNAME: user
