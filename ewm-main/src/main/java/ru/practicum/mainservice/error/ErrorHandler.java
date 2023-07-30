@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.practicum.mainservice.error.exception.BadRequestException;
-import ru.practicum.mainservice.error.exception.InternalServerErrorException;
 import ru.practicum.mainservice.error.exception.NotFoundException;
 
 import java.time.LocalDateTime;
@@ -73,19 +72,7 @@ public class ErrorHandler {
                         e.getFieldError().getField(), e.getMessage(), e.getFieldError().getRejectedValue()))
                 .message(e.getMessage())
                 .reason("Incorrectly made request.")
-                .status(HttpStatus.CONFLICT.toString())
-                .timestamp(LocalDateTime.now().format(DATE_TIME_FORMATTER))
-                .build();
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ApiError handleInternalServerErrorException(final InternalServerErrorException e) {
-        return ApiError.builder()
-                .errors(Arrays.toString(e.getStackTrace()))
-                .message(e.getMessage())
-                .reason("Internal server error.")
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.toString())
+                .status(HttpStatus.BAD_REQUEST.toString())
                 .timestamp(LocalDateTime.now().format(DATE_TIME_FORMATTER))
                 .build();
     }
