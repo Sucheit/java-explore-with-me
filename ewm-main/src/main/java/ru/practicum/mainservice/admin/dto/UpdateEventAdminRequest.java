@@ -5,7 +5,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.mainservice.event.dto.LocationDto;
 
-import javax.persistence.Access;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 

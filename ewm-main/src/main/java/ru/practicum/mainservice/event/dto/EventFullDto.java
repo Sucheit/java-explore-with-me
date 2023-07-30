@@ -10,7 +10,7 @@ import ru.practicum.mainservice.user.dto.UserShortDto;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class EventFullDto {
 
     Integer id;
