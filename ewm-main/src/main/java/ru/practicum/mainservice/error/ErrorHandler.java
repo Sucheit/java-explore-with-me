@@ -3,6 +3,7 @@ package ru.practicum.mainservice.error;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -70,6 +71,18 @@ public class ErrorHandler {
         return ApiError.builder()
                 .errors(String.format("Field: %s. Error: %s. Value: %s",
                         e.getFieldError().getField(), e.getMessage(), e.getFieldError().getRejectedValue()))
+                .message(e.getMessage())
+                .reason("Incorrectly made request.")
+                .status(HttpStatus.BAD_REQUEST.toString())
+                .timestamp(LocalDateTime.now().format(DATE_TIME_FORMATTER))
+                .build();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handlerMissingServletRequestParameterException(final MissingServletRequestParameterException e) {
+        return ApiError.builder()
+                .errors(String.format("Missing required parameter: %s.", e.getParameterName()))
                 .message(e.getMessage())
                 .reason("Incorrectly made request.")
                 .status(HttpStatus.BAD_REQUEST.toString())

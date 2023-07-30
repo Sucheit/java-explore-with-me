@@ -21,7 +21,7 @@ public class AdminEventsController {
 
     AdminService adminService;
 
-    @GetMapping("/events")
+    @GetMapping()
     public List<EventFullDto> searchEvents(
             @RequestParam(required = false) List<Integer> users,
             @RequestParam(required = false) List<String> states,
@@ -39,7 +39,7 @@ public class AdminEventsController {
         return eventFullDtoList;
     }
 
-    @PatchMapping("/events/{eventId}")
+    @PatchMapping("/{eventId}")
     public EventFullDto patchEvent(
             @PathVariable int eventId,
             @RequestBody UpdateEventAdminRequest event
