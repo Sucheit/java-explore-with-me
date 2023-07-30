@@ -1,13 +1,16 @@
 package ru.practicum.mainservice.event.dto;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import ru.practicum.mainservice.category.dto.CategoryDto;
 import ru.practicum.mainservice.event.model.State;
 import ru.practicum.mainservice.user.dto.UserShortDto;
 
-@Value
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class EventFullDto {
 
     Integer id;

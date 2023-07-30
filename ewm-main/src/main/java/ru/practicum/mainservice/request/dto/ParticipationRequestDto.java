@@ -1,11 +1,14 @@
 package ru.practicum.mainservice.request.dto;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import ru.practicum.mainservice.request.model.Status;
 
-@Value
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ParticipationRequestDto {
 
     Integer id;

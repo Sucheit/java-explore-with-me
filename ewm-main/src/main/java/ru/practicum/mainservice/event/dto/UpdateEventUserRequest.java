@@ -1,16 +1,19 @@
 package ru.practicum.mainservice.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 import static ru.practicum.mainservice.utils.Constants.DATE_TIME_PATTERN;
 
-@Value
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UpdateEventUserRequest {
 
     @Size(min = 20, max = 2000)

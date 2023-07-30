@@ -41,6 +41,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static ru.practicum.mainservice.event.mapper.EventMapper.*;
+import static ru.practicum.mainservice.utils.Constants.*;
 import static ru.practicum.mainservice.utils.Utility.getPageRequest;
 
 @Service
@@ -130,7 +131,7 @@ public class EventServiceImpl implements EventService {
                 .map(id -> "/events/" + id)
                 .collect(Collectors.toList());
         ResponseEntity<Object> response = statisticsClient.getStatistic(
-                LocalDateTime.MIN, LocalDateTime.MAX, uris, true);
+                START_DATE.format(DATE_TIME_FORMATTER), END_DATE.format(DATE_TIME_FORMATTER), uris, true);
         Gson gson = new Gson();
         ViewStatsDto[] viewStatsDtos;
         ObjectMapper objectMapper = new ObjectMapper();

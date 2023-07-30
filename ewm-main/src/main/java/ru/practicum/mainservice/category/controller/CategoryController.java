@@ -32,7 +32,7 @@ public class CategoryController {
 
     @GetMapping("/{catId}")
     public CategoryDto getCategoryById(
-            @PathVariable int catId
+            @PathVariable Integer catId
     ) {
         log.info("GET /categories/{catId} request: Id={}", catId);
         CategoryDto categoryDto = categoryService.getCategoryById(catId);
