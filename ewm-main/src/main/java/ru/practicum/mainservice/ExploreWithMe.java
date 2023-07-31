@@ -31,15 +31,23 @@ class TestController {
 
     StatisticsClient statisticsClient;
 
-    @GetMapping(path = "/test")
-    public String test(HttpServletRequest request) {
+    @GetMapping(path = "/test1")
+    public String test1(HttpServletRequest request) {
         log.info("Получили request={}", request);
-        createEndpointHit(request);
+        createEndpointHit1(request);
         log.info("Выполнили test");
         return "TEST УСПЕШЕН";
     }
 
-    private void createEndpointHit(HttpServletRequest request) {
+    @GetMapping(path = "/test2")
+    public String test2(HttpServletRequest request) {
+        log.info("Получили request={}", request);
+        createEndpointHit2(request);
+        log.info("Выполнили test");
+        return "TEST УСПЕШЕН";
+    }
+
+    private void createEndpointHit1(HttpServletRequest request) {
         EndpointHitDto endpointHitDto = EndpointHitDto.builder()
                 .ip(request.getRemoteAddr())
                 .uri(request.getRequestURI())
@@ -48,5 +56,16 @@ class TestController {
                 .build();
         log.info("POST /hit request: {}", endpointHitDto);
         statisticsClient.createHit(endpointHitDto);
+    }
+
+    private void createEndpointHit2(HttpServletRequest request) {
+        EndpointHitDto endpointHitDto = EndpointHitDto.builder()
+                .ip(request.getRemoteAddr())
+                .uri(request.getRequestURI())
+                .app("ewm-main-service")
+                .timestamp(LocalDateTime.now().format(DATE_TIME_FORMATTER))
+                .build();
+        log.info("POST /hit request: {}", endpointHitDto);
+        statisticsClient.createHit2(endpointHitDto);
     }
 }
