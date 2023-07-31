@@ -9,6 +9,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,7 @@ import static ru.practicum.mainservice.event.mapper.EventMapper.*;
 import static ru.practicum.mainservice.utils.Constants.*;
 import static ru.practicum.mainservice.utils.Utility.getPageRequest;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
@@ -130,6 +132,7 @@ public class EventServiceImpl implements EventService {
         List<String> uris = eventIds.stream()
                 .map(id -> "/events/" + id)
                 .collect(Collectors.toList());
+        log.info("GET /stats request: uris={}", uris);
         ResponseEntity<Object> response = statisticsClient.getStatistic(
                 START_DATE.format(DATE_TIME_FORMATTER), END_DATE.format(DATE_TIME_FORMATTER), uris, true);
         Gson gson = new Gson();
@@ -153,8 +156,7 @@ public class EventServiceImpl implements EventService {
     @Transactional(readOnly = true)
     @Override
     public EventFullDto findEventFullDtoById(int eventId) {
-        Event event = eventRepository.findByIdAndState(eventId, State.PUBLISHED)
-                .orElseThrow(() -> new NotFoundException(String.format("Event with id=%s was not found", eventId)));
+        Event event = eventRepository.findByIdAndState(eventId, State.PUBLISHED);
         return getEventFullDto(List.of(event)).get(0);
     }
 

@@ -44,11 +44,11 @@ public class EventController {
         log.info("GET /events request: text={}, categories={}, paid={}, rangeStart={}, rangeEnd={}," +
                         " onlyAvailable={}, sort={}, from={}, size={}", text, categories, paid, rangeStart,
                 rangeEnd, onlyAvailable, sort, from, size);
+        createEndpointHit(request);
         List<EventShortDto> eventShortDtoList = eventService.searchEventsByUser(
                 text, categories, paid, rangeStart, rangeEnd,
                 onlyAvailable, sort, from, size);
         log.info("Request GET /events completed: {}", eventShortDtoList);
-        createEndpointHit(request);
         return eventShortDtoList;
     }
 
@@ -58,18 +58,20 @@ public class EventController {
             HttpServletRequest request
     ) {
         log.info("GET /event/{id} request: id={}", id);
+        createEndpointHit(request);
         EventFullDto eventFullDto = eventService.findEventFullDtoById(id);
         log.info("GET /event/{id} completed: {}", eventFullDto);
-        createEndpointHit(request);
         return eventFullDto;
     }
 
     private void createEndpointHit(HttpServletRequest request) {
-        statisticsClient.createHit(EndpointHitDto.builder()
+        EndpointHitDto endpointHitDto = EndpointHitDto.builder()
                 .ip(request.getRemoteAddr())
                 .uri(request.getRequestURI())
                 .app("ewm-main-service")
                 .timestamp(LocalDateTime.now().format(DATE_TIME_FORMATTER))
-                .build());
+                .build();
+        log.info("POST /hit request: {}", endpointHitDto);
+        statisticsClient.createHit(endpointHitDto);
     }
 }

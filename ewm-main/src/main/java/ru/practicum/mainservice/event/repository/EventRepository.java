@@ -7,7 +7,6 @@ import ru.practicum.mainservice.event.model.Event;
 import ru.practicum.mainservice.event.model.State;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface EventRepository extends JpaRepository<Event, Integer>, QuerydslPredicateExecutor<Event> {
 
@@ -15,7 +14,7 @@ public interface EventRepository extends JpaRepository<Event, Integer>, Querydsl
 
     Event findByIdAndInitiatorId(Integer userId, Integer eventId);
 
-    Optional<Event> findByIdAndState(Integer eventId, State state);
+    Event findByIdAndState(Integer eventId, State state);
 
     List<Event> findByIdIn(List<Integer> ids);
 }

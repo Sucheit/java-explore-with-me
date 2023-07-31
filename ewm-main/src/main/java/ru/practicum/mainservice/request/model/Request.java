@@ -34,8 +34,10 @@ public class Request {
     @JoinColumn(referencedColumnName = "user_id")
     User requester;
 
+    @Column
     LocalDateTime created;
 
     @Enumerated(EnumType.STRING)
+    @Column
     Status status;
 }

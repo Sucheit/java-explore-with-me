@@ -1,8 +1,8 @@
 package ru.practicum.mainservice.admin.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.format.annotation.DateTimeFormat;
 import ru.practicum.mainservice.event.dto.LocationDto;
 
 import javax.validation.constraints.Size;
@@ -25,7 +25,7 @@ public class UpdateEventAdminRequest {
     @Size(min = 20, max = 7000)
     String description;
 
-    @JsonFormat(pattern = DATE_TIME_PATTERN)
+    @DateTimeFormat(pattern = DATE_TIME_PATTERN)
     LocalDateTime eventDate;
 
     LocationDto location;

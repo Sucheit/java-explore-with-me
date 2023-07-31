@@ -35,7 +35,7 @@ public class StatisticsClient extends BaseClient {
                 "unique", unique,
                 "uris", uris
         );
-        return get(API_PREFIX_STATS + "?start={start}&end={}&uris={}&unique={}", parameters);
+        return get(API_PREFIX_STATS + "?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
     }
 
     public ResponseEntity<Object> createHit(EndpointHitDto endpointHitDto) {

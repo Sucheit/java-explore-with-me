@@ -1,8 +1,8 @@
 package ru.practicum.mainservice.event.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -31,7 +31,7 @@ public class NewEventDto {
     String description;
 
     @NotNull
-    @JsonFormat(pattern = DATE_TIME_PATTERN)
+    @DateTimeFormat(pattern = DATE_TIME_PATTERN)
     LocalDateTime eventDate;
 
     @NotNull
