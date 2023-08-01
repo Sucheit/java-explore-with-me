@@ -4,12 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.dto.EndpointHitDto;
 
@@ -36,12 +33,11 @@ public class StatisticsClient extends BaseClient {
 
     public ResponseEntity<Object> getStatistic(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         log.info("GET /stats request: start={}, end={}, uris={}, uniques={}", start, end, uris, unique);
-        String urisString = String.join(",", uris);
         Map<String, Object> parameters = Map.of(
                 "start", start.format(DATE_TIME_FORMATTER),
                 "end", end.format(DATE_TIME_FORMATTER),
                 "unique", unique,
-                "uris", urisString
+                "uris", uris.toArray()
         );
         return get(API_PREFIX_STATS + "?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
     }
@@ -49,19 +45,5 @@ public class StatisticsClient extends BaseClient {
     public ResponseEntity<Object> createHit(EndpointHitDto endpointHitDto) {
         log.info("POST /hit request: {}", endpointHitDto);
         return post(API_PREFIX_HIT, endpointHitDto);
-    }
-
-    public void createHit2(EndpointHitDto endpointHitDto) {
-        log.info("POST /hit request: {}", endpointHitDto);
-        WebClient.Builder builder = WebClient.builder();
-        builder.build()
-                .post()
-                .uri(uriBuilder -> uriBuilder.scheme("http").host("localhost").port(9090).path("/hit").build())
-//                .uri(URI.create("http://localhost:9090/hit"))
-                .header(HttpHeaders.ACCEPT, "application/json")
-                .body(BodyInserters.fromValue(endpointHitDto))
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
     }
 }
