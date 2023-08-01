@@ -6,7 +6,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
@@ -27,13 +26,14 @@ public class StatisticsController {
     StatisticsService statisticsService;
 
     @PostMapping(path = "/hit")
-    public ResponseEntity<String> createEndpointHit(
+    @ResponseStatus(HttpStatus.CREATED)
+    public String createEndpointHit(
             @RequestBody @Valid EndpointHitDto endpointHitDto
     ) {
         log.info("POST /hit request: {}", endpointHitDto);
         statisticsService.createEndpointHit(endpointHitDto);
         log.info("POST /hit completed");
-        return new ResponseEntity<>("Информация сохранена", HttpStatus.CREATED);
+        return "Информация сохранена";
     }
 
     @GetMapping(path = "/stats")

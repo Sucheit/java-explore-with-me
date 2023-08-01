@@ -6,7 +6,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.mainservice.error.exception.BadRequestException;
 import ru.practicum.mainservice.error.exception.InternalServerErrorException;
 import ru.practicum.mainservice.error.exception.NotFoundException;
@@ -16,7 +15,7 @@ import java.util.Arrays;
 
 import static ru.practicum.mainservice.utils.Constants.DATE_TIME_FORMATTER;
 
-@RestControllerAdvice
+
 public class ErrorHandler {
 
     @ExceptionHandler

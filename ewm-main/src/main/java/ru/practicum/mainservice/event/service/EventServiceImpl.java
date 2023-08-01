@@ -192,7 +192,7 @@ public class EventServiceImpl implements EventService {
         }
         LocalDateTime eventDate = updateEventUserRequest.getEventDate();
         if (eventDate != null) {
-            if (eventDate.isBefore(LocalDateTime.now())) {
+            if (eventDate.minusHours(2).isBefore(LocalDateTime.now())) {
                 throw new BadRequestException("Event date is in the past");
             }
             event.setEventDate(updateEventUserRequest.getEventDate());
