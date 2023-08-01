@@ -1,12 +1,16 @@
 package ru.practicum.mainservice.event.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.format.annotation.DateTimeFormat;
 import ru.practicum.mainservice.category.model.Category;
 import ru.practicum.mainservice.user.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+
+import static ru.practicum.mainservice.utils.Constants.DATE_TIME_PATTERN;
 
 @Setter
 @Getter
@@ -35,6 +39,8 @@ public class Event {
     String description;
 
     @Column
+    @JsonFormat(pattern = DATE_TIME_PATTERN)
+    @DateTimeFormat(pattern = DATE_TIME_PATTERN)
     LocalDateTime eventDate;
 
     @ManyToOne
@@ -58,9 +64,13 @@ public class Event {
     String title;
 
     @Column
+    @JsonFormat(pattern = DATE_TIME_PATTERN)
+    @DateTimeFormat(pattern = DATE_TIME_PATTERN)
     LocalDateTime createdOn;
 
     @Column
+    @JsonFormat(pattern = DATE_TIME_PATTERN)
+    @DateTimeFormat(pattern = DATE_TIME_PATTERN)
     LocalDateTime publishedOn;
 
     @Column

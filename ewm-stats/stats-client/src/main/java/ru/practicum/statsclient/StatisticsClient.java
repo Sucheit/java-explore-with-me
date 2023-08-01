@@ -42,8 +42,8 @@ public class StatisticsClient extends BaseClient {
         return get(API_PREFIX_STATS + "?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
     }
 
-    public ResponseEntity<Object> createHit(EndpointHitDto endpointHitDto) {
+    public void createHit(EndpointHitDto endpointHitDto) {
         log.info("POST /hit request: {}", endpointHitDto);
-        return post(API_PREFIX_HIT, endpointHitDto);
+        post(API_PREFIX_HIT, endpointHitDto);
     }
 }

@@ -4,7 +4,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.mainservice.request.model.Status;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -18,6 +17,5 @@ public class EventRequestStatusUpdateRequest {
     @NotNull
     List<Integer> requestIds;
 
-    @NotBlank
     Status status;
 }

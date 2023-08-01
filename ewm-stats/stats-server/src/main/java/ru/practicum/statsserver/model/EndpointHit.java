@@ -1,10 +1,14 @@
 package ru.practicum.statsserver.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+
+import static ru.practicum.statsserver.utils.Constants.DATE_TIME_PATTERN;
 
 @Setter
 @Getter
@@ -31,5 +35,7 @@ public class EndpointHit {
     String ip;
 
     @Column
+    @JsonFormat(pattern = DATE_TIME_PATTERN)
+    @DateTimeFormat(pattern = DATE_TIME_PATTERN)
     LocalDateTime created;
 }

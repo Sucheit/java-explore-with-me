@@ -146,9 +146,10 @@ public class EventServiceImpl implements EventService {
         }
         Map<Integer, Integer> viewsMap = new HashMap<>();
         for (ViewStatsDto viewStatsDto : viewStatsDtos) {
+            log.info("ViewStatsDto = {}", viewStatsDto);
             String[] lines = viewStatsDto.getUri().split("/");
-            int a = Integer.parseInt(lines[2]);
-            viewsMap.put(a, viewStatsDto.getHits().intValue());
+            int eventId = Integer.parseInt(lines[2]);
+            viewsMap.put(eventId, viewStatsDto.getHits().intValue());
         }
         return viewsMap;
     }

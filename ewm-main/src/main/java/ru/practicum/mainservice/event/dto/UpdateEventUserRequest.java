@@ -1,5 +1,6 @@
 package ru.practicum.mainservice.event.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -24,6 +25,7 @@ public class UpdateEventUserRequest {
     @Size(min = 20, max = 7000)
     String description;
 
+    @JsonFormat(pattern = DATE_TIME_PATTERN)
     @DateTimeFormat(pattern = DATE_TIME_PATTERN)
     LocalDateTime eventDate;
 
