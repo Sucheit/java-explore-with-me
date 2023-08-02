@@ -26,16 +26,16 @@ import static ru.practicum.mainservice.utils.Constants.DATE_TIME_PATTERN;
 public class Request {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "request_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    @ManyToOne
-    @JoinColumn(referencedColumnName = "event_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "event_id", referencedColumnName = "event_id")
     Event event;
 
-    @ManyToOne
-    @JoinColumn(referencedColumnName = "user_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     User requester;
 
     @Column

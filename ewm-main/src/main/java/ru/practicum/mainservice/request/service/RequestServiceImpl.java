@@ -35,7 +35,7 @@ public class RequestServiceImpl implements RequestService {
     @Transactional(readOnly = true)
     @Override
     public int getCountConfirmedRequest(int eventId) {
-        return requestRepository.countByEventAndStatus(eventId, Status.CONFIRMED);
+        return requestRepository.countByEventIdAndStatus(eventId, Status.CONFIRMED);
     }
 
     @Transactional

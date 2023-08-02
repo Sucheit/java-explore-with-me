@@ -31,8 +31,8 @@ public class Event {
     @Column
     String annotation;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "category_id", referencedColumnName = "category_id")
     Category category;
 
     @Column
@@ -43,12 +43,12 @@ public class Event {
     @DateTimeFormat(pattern = DATE_TIME_PATTERN)
     LocalDateTime eventDate;
 
-    @ManyToOne
-    @JoinColumn(name = "location_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "location_id", referencedColumnName = "location_id")
     Location location;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     User initiator;
 
     @Column

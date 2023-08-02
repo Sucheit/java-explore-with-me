@@ -24,7 +24,7 @@ public interface EventService {
 
     EventFullDto patchEventByAdmin(int eventId, UpdateEventAdminRequest event);
 
-    List<EventShortDto> getEventByUserId(int userId, int from, int size);
+    List<EventShortDto> getEventsByUserId(int userId, int from, int size);
 
     EventFullDto createEventByUser(User user, NewEventDto newEventDto);
 

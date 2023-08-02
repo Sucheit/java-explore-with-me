@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface RequestRepository extends JpaRepository<Request, Integer> {
 
-    Integer countByEventAndStatus(Integer eventId, Status status);
+    Integer countByEventIdAndStatus(Integer eventId, Status status);
 
     List<Request> findByEventId(Integer eventId);
 

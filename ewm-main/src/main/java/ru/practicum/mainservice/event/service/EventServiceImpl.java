@@ -1,8 +1,5 @@
 package ru.practicum.mainservice.event.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -11,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.ViewStatsDto;
@@ -20,7 +16,6 @@ import ru.practicum.mainservice.category.model.Category;
 import ru.practicum.mainservice.category.service.CategoryService;
 import ru.practicum.mainservice.error.exception.BadRequestException;
 import ru.practicum.mainservice.error.exception.ConflictException;
-import ru.practicum.mainservice.error.exception.InternalServerErrorException;
 import ru.practicum.mainservice.error.exception.NotFoundException;
 import ru.practicum.mainservice.event.dto.*;
 import ru.practicum.mainservice.event.mapper.EventMapper;
@@ -32,7 +27,7 @@ import ru.practicum.mainservice.event.repository.EventRepository;
 import ru.practicum.mainservice.event.repository.LocationRepository;
 import ru.practicum.mainservice.request.service.RequestService;
 import ru.practicum.mainservice.user.model.User;
-import ru.practicum.statsclient.StatisticsClient;
+import ru.practicum.statsclient.StatsClient;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -60,7 +55,7 @@ public class EventServiceImpl implements EventService {
 
     CategoryService categoryService;
 
-    StatisticsClient statisticsClient;
+    StatsClient statsClient;
 
     @Transactional(readOnly = true)
     @Override
@@ -133,23 +128,14 @@ public class EventServiceImpl implements EventService {
         List<String> uris = eventIds.stream()
                 .map(id -> "/events/" + id)
                 .collect(Collectors.toList());
-        log.info("GET /stats request: uris={}", uris);
-        ResponseEntity<Object> response = statisticsClient.getStatistic(START_DATE, END_DATE, uris, true);
-        Gson gson = new Gson();
-        ViewStatsDto[] viewStatsDtos;
-        ObjectMapper objectMapper = new ObjectMapper();
-        String responseJson = gson.toJson(response.getBody());
-        try {
-            viewStatsDtos = objectMapper.readValue(responseJson, ViewStatsDto[].class);
-        } catch (JsonProcessingException e) {
-            throw new InternalServerErrorException("Internal Server Error: unable to read statistics server data");
-        }
+        List<ViewStatsDto> viewStatsDtos = statsClient.getViewStats(START_DATE, END_DATE, uris, true);
         Map<Integer, Integer> viewsMap = new HashMap<>();
         for (ViewStatsDto viewStatsDto : viewStatsDtos) {
-            log.info("ViewStatsDto = {}", viewStatsDto);
             String[] lines = viewStatsDto.getUri().split("/");
-            int eventId = Integer.parseInt(lines[2]);
-            viewsMap.put(eventId, viewStatsDto.getHits().intValue());
+            if (lines.length == 3) {
+                int eventId = Integer.parseInt(lines[2]);
+                viewsMap.put(eventId, viewStatsDto.getHits().intValue());
+            }
         }
         return viewsMap;
     }
@@ -157,11 +143,12 @@ public class EventServiceImpl implements EventService {
     @Transactional(readOnly = true)
     @Override
     public EventFullDto findEventFullDtoById(int eventId) {
-        Event event = eventRepository.findByIdAndState(eventId, State.PUBLISHED);
+        Event event = eventRepository.findByIdAndState(eventId, State.PUBLISHED)
+                .orElseThrow(() -> new NotFoundException(String.format("Published Event with id=%s was not found", eventId)));
         return getEventFullDto(List.of(event)).get(0);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Event getEventById(int eventId) {
         return eventRepository.findById(eventId)
@@ -173,8 +160,8 @@ public class EventServiceImpl implements EventService {
     public EventFullDto patchEventByUser(int eventId, UpdateEventUserRequest updateEventUserRequest) {
         Event event = getEventById(eventId);
         patchEventFields(event, updateEventUserRequest);
-        event = eventRepository.save(event);
-        return getEventFullDto(List.of(event)).get(0);
+        Event savedEvent = eventRepository.save(event);
+        return getEventFullDto(List.of(savedEvent)).get(0);
     }
 
     private void patchEventFields(Event event, UpdateEventUserRequest updateEventUserRequest) {
@@ -193,7 +180,7 @@ public class EventServiceImpl implements EventService {
         LocalDateTime eventDate = updateEventUserRequest.getEventDate();
         if (eventDate != null) {
             if (eventDate.minusHours(2).isBefore(LocalDateTime.now())) {
-                throw new BadRequestException("Event date is in the past");
+                throw new ConflictException("Event date must be future 2 hours from now");
             }
             event.setEventDate(updateEventUserRequest.getEventDate());
         }
@@ -264,14 +251,11 @@ public class EventServiceImpl implements EventService {
     public EventFullDto patchEventByAdmin(int eventId, UpdateEventAdminRequest updateEventAdminRequest) {
         Event event = getEventById(eventId);
         patchEventFields(event, updateEventAdminRequest);
-        event = eventRepository.save(event);
-        return getEventFullDto(List.of(event)).get(0);
+        Event savedEvent = eventRepository.save(event);
+        return getEventFullDto(List.of(savedEvent)).get(0);
     }
 
     private void patchEventFields(Event event, UpdateEventAdminRequest updateEventAdminRequest) {
-        if (event.getEventDate().minusHours(1).isBefore(LocalDateTime.now())) {
-            throw new BadRequestException("");
-        }
         event.setPublishedOn(LocalDateTime.now());
         String annotation = updateEventAdminRequest.getAnnotation();
         if (annotation != null) {
@@ -287,8 +271,8 @@ public class EventServiceImpl implements EventService {
         }
         LocalDateTime eventDate = updateEventAdminRequest.getEventDate();
         if (eventDate != null) {
-            if (eventDate.isBefore(LocalDateTime.now())) {
-                throw new BadRequestException("Event date is in the past");
+            if (eventDate.minusHours(1).isBefore(LocalDateTime.now())) {
+                throw new ConflictException("Event date is in the past");
             }
             event.setEventDate(updateEventAdminRequest.getEventDate());
         }
@@ -332,7 +316,7 @@ public class EventServiceImpl implements EventService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<EventShortDto> getEventByUserId(int userId, int from, int size) {
+    public List<EventShortDto> getEventsByUserId(int userId, int from, int size) {
         List<Event> events = eventRepository.findAllByInitiatorId(userId, getPageRequest(from, size));
         return getEventFullDto(events)
                 .stream()
@@ -343,6 +327,9 @@ public class EventServiceImpl implements EventService {
     @Transactional
     @Override
     public EventFullDto createEventByUser(User user, NewEventDto newEventDto) {
+        if (newEventDto.getEventDate().minusHours(2).isBefore(LocalDateTime.now())) {
+            throw new ConflictException("Event date must be future 2 hours from now");
+        }
         Category category = categoryService.findCategoryById(newEventDto.getCategory());
         Location location = createLocation(newEventDto.getLocation());
         Event event = eventRepository.save(mapToEvent(category, user, location, newEventDto));
@@ -352,7 +339,9 @@ public class EventServiceImpl implements EventService {
     @Transactional(readOnly = true)
     @Override
     public EventFullDto getEventByUser(int userId, int eventId) {
-        return getEventFullDto(List.of(eventRepository.findByIdAndInitiatorId(eventId, userId))).get(0);
+        Event event = eventRepository.findByIdAndInitiatorId(eventId, userId)
+                .orElseThrow(() -> new NotFoundException(String.format("Event id=%s and initiatorId=%s was not found", eventId, userId)));
+        return getEventFullDto(List.of(event)).get(0);
     }
 
     @Transactional

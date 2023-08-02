@@ -12,7 +12,7 @@ public class Constants {
 
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
 
-    public static final LocalDateTime START_DATE = LocalDateTime.of(2023, 1, 1, 0, 0);
+    public static final LocalDateTime START_DATE = LocalDateTime.of(2023, 1, 1, 0, 0, 0);
 
-    public static final LocalDateTime END_DATE = LocalDateTime.of(2024, 1, 1, 0, 0);
+    public static final LocalDateTime END_DATE = LocalDateTime.of(2024, 1, 1, 0, 0, 0);
 }

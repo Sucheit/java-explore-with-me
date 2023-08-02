@@ -9,7 +9,7 @@ import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.mainservice.event.dto.EventFullDto;
 import ru.practicum.mainservice.event.dto.EventShortDto;
 import ru.practicum.mainservice.event.service.EventService;
-import ru.practicum.statsclient.StatisticsClient;
+import ru.practicum.statsclient.StatsClient;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -26,7 +26,7 @@ public class EventController {
 
     EventService eventService;
 
-    StatisticsClient statisticsClient;
+    StatsClient statsClient;
 
     @GetMapping
     public List<EventShortDto> getEvents(
@@ -72,6 +72,6 @@ public class EventController {
                 .timestamp(LocalDateTime.now().format(DATE_TIME_FORMATTER))
                 .build();
         log.info("POST /hit request: {}", endpointHitDto);
-        statisticsClient.createHit(endpointHitDto);
+        statsClient.createHit(endpointHitDto);
     }
 }

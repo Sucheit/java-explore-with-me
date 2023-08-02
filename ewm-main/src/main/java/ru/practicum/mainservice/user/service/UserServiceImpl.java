@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<EventShortDto> getEventsByUserId(int userId, int from, int size) {
         getUserById(userId);
-        return eventService.getEventByUserId(userId, from, size);
+        return eventService.getEventsByUserId(userId, from, size);
     }
 
     @Transactional

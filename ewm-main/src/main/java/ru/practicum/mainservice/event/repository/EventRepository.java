@@ -7,14 +7,15 @@ import ru.practicum.mainservice.event.model.Event;
 import ru.practicum.mainservice.event.model.State;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EventRepository extends JpaRepository<Event, Integer>, QuerydslPredicateExecutor<Event> {
 
     List<Event> findAllByInitiatorId(Integer userId, PageRequest pageRequest);
 
-    Event findByIdAndInitiatorId(Integer userId, Integer eventId);
+    Optional<Event> findByIdAndInitiatorId(Integer userId, Integer eventId);
 
-    Event findByIdAndState(Integer eventId, State state);
+    Optional<Event> findByIdAndState(Integer eventId, State state);
 
     List<Event> findByIdIn(List<Integer> ids);
 }
