@@ -46,7 +46,7 @@ public class AdminCompilationsController {
     @PatchMapping("/{compId}")
     public CompilationDto patchCompilation(
             @PathVariable int compId,
-            @RequestBody UpdateCompilationRequest updateCompilationRequest
+            @RequestBody @Valid UpdateCompilationRequest updateCompilationRequest
     ) {
         log.info("PATCH /admin/compilations/{compId} request: compId={}, {}", compId, updateCompilationRequest);
         CompilationDto compilationDto = adminService.patchCompilation(compId, updateCompilationRequest);
