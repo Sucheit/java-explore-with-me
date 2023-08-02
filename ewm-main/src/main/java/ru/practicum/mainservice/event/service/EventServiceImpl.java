@@ -142,9 +142,17 @@ public class EventServiceImpl implements EventService {
 
     @Transactional(readOnly = true)
     @Override
-    public EventFullDto findEventFullDtoById(int eventId) {
+    public EventFullDto findPublishedEventFullDtoById(int eventId) {
         Event event = eventRepository.findByIdAndState(eventId, State.PUBLISHED)
                 .orElseThrow(() -> new NotFoundException(String.format("Published Event with id=%s was not found", eventId)));
+        return getEventFullDto(List.of(event)).get(0);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public EventFullDto getEventFullDtoById(int eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException(String.format("Event with id=%s was not found", eventId)));
         return getEventFullDto(List.of(event)).get(0);
     }
 
@@ -160,8 +168,7 @@ public class EventServiceImpl implements EventService {
     public EventFullDto patchEventByUser(int eventId, UpdateEventUserRequest updateEventUserRequest) {
         Event event = getEventById(eventId);
         patchEventFields(event, updateEventUserRequest);
-        Event savedEvent = eventRepository.save(event);
-        return getEventFullDto(List.of(savedEvent)).get(0);
+        return getEventFullDto(List.of(eventRepository.save(event))).get(0);
     }
 
     private void patchEventFields(Event event, UpdateEventUserRequest updateEventUserRequest) {
@@ -251,8 +258,7 @@ public class EventServiceImpl implements EventService {
     public EventFullDto patchEventByAdmin(int eventId, UpdateEventAdminRequest updateEventAdminRequest) {
         Event event = getEventById(eventId);
         patchEventFields(event, updateEventAdminRequest);
-        Event savedEvent = eventRepository.save(event);
-        return getEventFullDto(List.of(savedEvent)).get(0);
+        return getEventFullDto(List.of(eventRepository.save(event))).get(0);
     }
 
     private void patchEventFields(Event event, UpdateEventAdminRequest updateEventAdminRequest) {
@@ -303,7 +309,7 @@ public class EventServiceImpl implements EventService {
             }
             if (stateAction.equals(ru.practicum.mainservice.admin.dto.StateAction.REJECT_EVENT)) {
                 if (State.PUBLISHED.equals(event.getState())) {
-                    throw new ConflictException("Event is already has State: PUBLISHED");
+                    throw new ConflictException("Event is already PUBLISHED");
                 }
                 event.setState(State.CANCELED);
             }

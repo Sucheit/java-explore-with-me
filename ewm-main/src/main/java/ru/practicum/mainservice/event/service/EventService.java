@@ -17,7 +17,10 @@ public interface EventService {
                                            LocalDateTime rangeEnd, Boolean onlyAvailable, String sort, int from,
                                            int size);
 
-    EventFullDto findEventFullDtoById(int eventId);
+    EventFullDto findPublishedEventFullDtoById(int eventId);
+
+    EventFullDto getEventFullDtoById(int eventId);
+
 
     List<EventFullDto> getEventsByAdmin(List<Integer> users, List<String> states, List<Integer> categories,
                                         LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size);

@@ -47,7 +47,7 @@ public class CompilationServiceImpl implements CompilationService {
     @Transactional(readOnly = true)
     private List<EventShortDto> getEventShortDtoList(Compilation compilation) {
         return compilation.getEvents().stream()
-                .map(event -> eventService.findEventFullDtoById(event.getId()))
+                .map(event -> eventService.getEventFullDtoById(event.getId()))
                 .map(EventMapper::mapEventFullDtoToEventShortDto)
                 .collect(Collectors.toList());
     }

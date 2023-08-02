@@ -83,6 +83,9 @@ public class RequestServiceImpl implements RequestService {
     @Transactional
     @Override
     public ParticipationRequestDto createParticipationRequest(User user, Event event) {
+        if (requestRepository.findByEventIdAndRequesterId(event.getId(), user.getId()).isPresent()) {
+            throw new ConflictException(String.format("User id=%s already sent request to participated in event id%s", user.getId(), event.getId()));
+        }
         if (event.getInitiator().getId().equals(user.getId())) {
             throw new ConflictException("Event initiator cannot create participation request.");
         }

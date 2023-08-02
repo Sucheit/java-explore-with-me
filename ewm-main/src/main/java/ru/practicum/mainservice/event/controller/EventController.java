@@ -61,7 +61,7 @@ public class EventController {
     ) {
         log.info("GET /event/{id} request: id={}", id);
         createEndpointHit(request);
-        EventFullDto eventFullDto = eventService.findEventFullDtoById(id);
+        EventFullDto eventFullDto = eventService.findPublishedEventFullDtoById(id);
         log.info("GET /event/{id} completed: {}", eventFullDto);
         return eventFullDto;
     }
