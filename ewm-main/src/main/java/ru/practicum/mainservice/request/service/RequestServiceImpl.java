@@ -54,7 +54,7 @@ public class RequestServiceImpl implements RequestService {
         for (Request request : requests) {
             if (!request.getStatus().equals(Status.PENDING))
                 throw new ConflictException(String.format("Request id=%s status is not PENDING.", request.getId()));
-            if (participantLimit > countConfirm.get()) {
+            if (participantLimit > countConfirm.get() || participantLimit == 0) {
                 request.setStatus(updateRequest.getStatus());
                 countConfirm.set(request.getStatus() == Status.CONFIRMED ? countConfirm.get() + 1 : countConfirm.get());
                 requestRepository.save(request);
@@ -64,7 +64,6 @@ public class RequestServiceImpl implements RequestService {
                     pendingRequest.setStatus(Status.REJECTED);
                     requestRepository.save(pendingRequest);
                 });
-                throw new ConflictException("The participant limit has been reached");
             }
         }
 
@@ -84,25 +83,21 @@ public class RequestServiceImpl implements RequestService {
     @Transactional
     @Override
     public ParticipationRequestDto createParticipationRequest(User user, Event event) {
-        Request request = requestRepository.findByEventIdAndRequesterId(event.getId(), user.getId())
-                .orElseThrow(() -> new ConflictException("Request already created."));
-        if (request.getRequester().getId().equals(user.getId())) {
+        if (event.getInitiator().getId().equals(user.getId())) {
             throw new ConflictException("Event initiator cannot create participation request.");
         }
         if (!event.getState().equals(State.PUBLISHED)) {
             throw new ConflictException("Event is not published.");
         }
         int limit = event.getParticipantLimit();
-        if (event.getRequestModeration()
-                && limit != 0
-                && limit <= requestRepository.findByEventIdAndStatus(event.getId(), Status.CONFIRMED).size()) {
-            throw new ConflictException("Confirmed participation limit reached.");
+        if (limit != 0 && limit <= requestRepository.findByEventIdAndStatus(event.getId(), Status.CONFIRMED).size()) {
+            throw new ConflictException("Confirmed participation limit has been reached.");
         }
         Request newRequest = Request.builder()
                 .requester(user)
                 .event(event)
                 .created(LocalDateTime.now())
-                .status(Status.PENDING)
+                .status(event.getRequestModeration() ? Status.PENDING : Status.CONFIRMED)
                 .build();
         return mapRequestToDto(requestRepository.save(newRequest));
     }

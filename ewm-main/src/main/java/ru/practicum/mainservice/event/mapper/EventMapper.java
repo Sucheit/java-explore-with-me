@@ -41,15 +41,17 @@ public class EventMapper {
                 .build();
     }
 
-    public static EventShortDto mapEventFullDtoToEventShortDto(EventFullDto event) {
+    public static EventShortDto mapEventFullDtoToEventShortDto(EventFullDto eventFullDto) {
         return EventShortDto.builder()
-                .id(event.getId())
-                .annotation(event.getAnnotation())
-                .category(event.getCategory())
-                .eventDate(event.getEventDate())
-                .initiator(event.getInitiator())
-                .paid(event.getPaid())
-                .title(event.getTitle())
+                .id(eventFullDto.getId())
+                .annotation(eventFullDto.getAnnotation())
+                .category(eventFullDto.getCategory())
+                .eventDate(eventFullDto.getEventDate())
+                .initiator(eventFullDto.getInitiator())
+                .paid(eventFullDto.getPaid())
+                .title(eventFullDto.getTitle())
+                .confirmedRequests(eventFullDto.getConfirmedRequests())
+                .views(eventFullDto.getViews())
                 .build();
     }
 

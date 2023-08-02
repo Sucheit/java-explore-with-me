@@ -70,6 +70,7 @@ public class CompilationServiceImpl implements CompilationService {
     public CompilationDto createCompilation(NewCompilationDto newCompilationDto) {
         List<Event> events = eventRepository.findByIdIn(newCompilationDto.getEvents());
         Compilation compilation = mapToCompilation(newCompilationDto, events);
+        compilationRepository.save(compilation);
         return mapToCompilationDto(compilation, getEventShortDtoList(compilation));
     }
 

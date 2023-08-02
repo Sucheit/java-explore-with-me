@@ -17,5 +17,6 @@ public class EventRequestStatusUpdateRequest {
     @NotNull
     List<Integer> requestIds;
 
+    @NotNull
     Status status;
 }
