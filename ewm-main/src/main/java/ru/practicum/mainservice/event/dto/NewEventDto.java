@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -32,6 +33,7 @@ public class NewEventDto {
     String description;
 
     @NotNull
+    @Future
     @JsonFormat(pattern = DATE_TIME_PATTERN)
     @DateTimeFormat(pattern = DATE_TIME_PATTERN)
     LocalDateTime eventDate;

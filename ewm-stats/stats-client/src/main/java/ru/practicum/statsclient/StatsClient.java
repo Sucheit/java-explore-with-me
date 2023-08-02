@@ -23,7 +23,7 @@ import java.util.Optional;
 @Service
 public class StatsClient {
 
-    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final String API_PREFIX_HIT = "/hit";
 
     private static final String API_PREFIX_STATS = "/stats";
@@ -46,8 +46,8 @@ public class StatsClient {
                     .bodyToMono(String.class)
                     .block();
         } catch (Exception e) {
-            log.info("Stats server does not work.");
-            return "Stats server does not work.";
+            log.info("Stats server error.");
+            return "Stats server error.";
         }
     }
 
@@ -69,7 +69,7 @@ public class StatsClient {
                     })
                     .block();
         } catch (Exception e) {
-            log.info("Stats server does not work.");
+            log.info("Stats server error.");
             return Collections.emptyList();
         }
     }

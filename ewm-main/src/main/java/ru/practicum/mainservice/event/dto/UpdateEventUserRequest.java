@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Future;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -25,6 +26,7 @@ public class UpdateEventUserRequest {
     @Size(min = 20, max = 7000)
     String description;
 
+    @Future
     @JsonFormat(pattern = DATE_TIME_PATTERN)
     @DateTimeFormat(pattern = DATE_TIME_PATTERN)
     LocalDateTime eventDate;

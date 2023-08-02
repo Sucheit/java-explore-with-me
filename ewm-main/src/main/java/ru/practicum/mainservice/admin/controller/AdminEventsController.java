@@ -11,6 +11,8 @@ import ru.practicum.mainservice.admin.service.AdminService;
 import ru.practicum.mainservice.event.dto.EventFullDto;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -32,8 +34,8 @@ public class AdminEventsController {
             @RequestParam(required = false) List<Integer> categories,
             @RequestParam(required = false) @DateTimeFormat(pattern = DATE_TIME_PATTERN) LocalDateTime rangeStart,
             @RequestParam(required = false) @DateTimeFormat(pattern = DATE_TIME_PATTERN) LocalDateTime rangeEnd,
-            @RequestParam(defaultValue = "0") int from,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+            @RequestParam(defaultValue = "10") @Positive int size
     ) {
         log.info("GET /admin/events request: users={}, states={}, categories={}, rangeStart={}, rangeEnd={}," +
                 " from={}, size={}", users, states, categories, rangeStart, rangeEnd, from, size);

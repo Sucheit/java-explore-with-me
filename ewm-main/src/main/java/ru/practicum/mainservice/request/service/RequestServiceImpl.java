@@ -42,21 +42,19 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public EventRequestStatusUpdateResult patchEventRequestStatus(
             int eventId, int participantLimit, EventRequestStatusUpdateRequest updateRequest) {
+        AtomicInteger countConfirmed = new AtomicInteger(
+                requestRepository.findByEventIdAndStatus(eventId, Status.CONFIRMED).size());
+        if (countConfirmed.intValue() == participantLimit) {
+            throw new ConflictException("Participation limit has been reached");
+        }
         List<Request> requests = requestRepository
                 .findByIdInAndEventId(updateRequest.getRequestIds(), eventId);
-        List<Request> requestsByEvent = requestRepository.findByEventId(eventId);
-        AtomicInteger countConfirm = new AtomicInteger();
-        requestsByEvent.forEach(request -> {
-            if (request.getStatus() == Status.CONFIRMED) {
-                countConfirm.set(countConfirm.get() + 1);
-            }
-        });
         for (Request request : requests) {
             if (!request.getStatus().equals(Status.PENDING))
                 throw new ConflictException(String.format("Request id=%s status is not PENDING.", request.getId()));
-            if (participantLimit > countConfirm.get() || participantLimit == 0) {
+            if (participantLimit > countConfirmed.get() || participantLimit == 0) {
                 request.setStatus(updateRequest.getStatus());
-                countConfirm.set(request.getStatus() == Status.CONFIRMED ? countConfirm.get() + 1 : countConfirm.get());
+                countConfirmed.set(request.getStatus() == Status.CONFIRMED ? countConfirmed.get() + 1 : countConfirmed.get());
                 requestRepository.save(request);
             } else {
                 List<Request> pendingRequests = requestRepository.findByEventIdAndStatus(eventId, Status.PENDING);
@@ -100,7 +98,7 @@ public class RequestServiceImpl implements RequestService {
                 .requester(user)
                 .event(event)
                 .created(LocalDateTime.now())
-                .status(event.getRequestModeration() ? Status.PENDING : Status.CONFIRMED)
+                .status((!event.getRequestModeration() || limit == 0) ? Status.CONFIRMED : Status.PENDING)
                 .build();
         return mapRequestToDto(requestRepository.save(newRequest));
     }

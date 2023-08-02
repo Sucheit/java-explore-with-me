@@ -87,14 +87,14 @@ public class EventMapper {
     public static LocationDto mapLocationToLocationDto(Location location) {
         return LocationDto.builder()
                 .lat(location.getLat())
-                .lon(location.getLat())
+                .lon(location.getLon())
                 .build();
     }
 
     public static Location mapLocationDtoToLocation(LocationDto locationDto) {
         return Location.builder()
                 .lat(locationDto.getLat())
-                .lon(locationDto.getLat())
+                .lon(locationDto.getLon())
                 .build();
     }
 }

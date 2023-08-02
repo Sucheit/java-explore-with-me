@@ -16,6 +16,8 @@ import ru.practicum.mainservice.request.dto.ParticipationRequestDto;
 import ru.practicum.mainservice.user.service.UserService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @Slf4j
@@ -23,15 +25,15 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(path = "/users")
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class UserController {
+public class UserEventsController {
 
     UserService userService;
 
     @GetMapping("/{userId}/events")
     public List<EventShortDto> getEventsUser(
             @PathVariable int userId,
-            @RequestParam(defaultValue = "0") int from,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+            @RequestParam(defaultValue = "10") @Positive int size
     ) {
         log.info("GET /users/{userId}/events request: userId={}, from={}, size={}", userId, from, size);
         List<EventShortDto> eventShortDtoList = userService.getEventsByUserId(userId, from, size);
@@ -97,39 +99,5 @@ public class UserController {
         EventRequestStatusUpdateResult result = userService.patchEventByUser(userId, eventId, request);
         log.info("PATCH /users/{userId}/events{eventId}/requests completed: {}", result);
         return result;
-    }
-
-    @GetMapping("/{userId}/requests")
-    public List<ParticipationRequestDto> getRequestsByUser(
-            @PathVariable int userId
-    ) {
-        log.info("GET /users/{userId}/requests request: userId={}", userId);
-        List<ParticipationRequestDto> participationRequestDtoList = userService.getParticipationRequests(userId);
-        log.info("GET /users/{userId}/requests completed: {}", participationRequestDtoList);
-        return participationRequestDtoList;
-    }
-
-    @PostMapping("{userId}/requests")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ParticipationRequestDto createParticipationRequest(
-            @PathVariable int userId,
-            @RequestParam int eventId
-    ) {
-        log.info("POST /users/{userId}/requests request: userId={}, eventId={}", userId, eventId);
-        ParticipationRequestDto participationRequestDto = userService.createParticipationRequest(userId, eventId);
-        log.info("POST /users/{userId}/requests completed: {}", participationRequestDto);
-        return participationRequestDto;
-    }
-
-    @PatchMapping("/{userId}/requests/{requestId}/cancel")
-    public ParticipationRequestDto cancelParticipationRequest(
-            @PathVariable int userId,
-            @PathVariable int requestId
-    ) {
-        log.info("PATCH /users/{userId}/requests/{requestId}/cancel request: userId={}, requestId={}",
-                userId, requestId);
-        ParticipationRequestDto participationRequestDto = userService.cancelParticipationRequest(userId, requestId);
-        log.info("PATCH /users/{userId}/requests/{requestId}/cancel completed: {}", participationRequestDto);
-        return participationRequestDto;
     }
 }

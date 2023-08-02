@@ -14,9 +14,9 @@ import ru.practicum.mainservice.error.exception.NotFoundException;
 import ru.practicum.mainservice.event.dto.EventShortDto;
 import ru.practicum.mainservice.event.mapper.EventMapper;
 import ru.practicum.mainservice.event.model.Event;
-import ru.practicum.mainservice.event.repository.EventRepository;
 import ru.practicum.mainservice.event.service.EventService;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,8 +32,6 @@ public class CompilationServiceImpl implements CompilationService {
     CompilationRepository compilationRepository;
 
     EventService eventService;
-
-    EventRepository eventRepository;
 
     @Transactional(readOnly = true)
     @Override
@@ -68,7 +66,8 @@ public class CompilationServiceImpl implements CompilationService {
     @Transactional
     @Override
     public CompilationDto createCompilation(NewCompilationDto newCompilationDto) {
-        List<Event> events = eventRepository.findByIdIn(newCompilationDto.getEvents());
+        List<Event> events = eventService.findEventByIdsIn(newCompilationDto.getEvents() == null
+                ? Collections.emptyList() : newCompilationDto.getEvents());
         Compilation compilation = mapToCompilation(newCompilationDto, events);
         compilationRepository.save(compilation);
         return mapToCompilationDto(compilation, getEventShortDtoList(compilation));
@@ -86,7 +85,7 @@ public class CompilationServiceImpl implements CompilationService {
     public CompilationDto patchCompilation(int comId, UpdateCompilationRequest updateCompilationRequest) {
         Compilation compilation = getCompilationById(comId);
         if (updateCompilationRequest.getEvents() != null) {
-            List<Event> events = eventRepository.findByIdIn(updateCompilationRequest.getEvents());
+            List<Event> events = eventService.findEventByIdsIn(updateCompilationRequest.getEvents());
             compilation.setEvents(events);
         }
         if (updateCompilationRequest.getPinned() != null) {

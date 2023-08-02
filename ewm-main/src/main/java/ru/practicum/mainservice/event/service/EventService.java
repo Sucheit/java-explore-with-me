@@ -36,4 +36,6 @@ public interface EventService {
     Event getEventById(int eventId);
 
     EventFullDto patchEventByUser(int eventId, UpdateEventUserRequest updateEventUserRequest);
+
+    List<Event> findEventByIdsIn(List<Integer> ids);
 }

@@ -171,6 +171,11 @@ public class EventServiceImpl implements EventService {
         return getEventFullDto(List.of(eventRepository.save(event))).get(0);
     }
 
+    @Override
+    public List<Event> findEventByIdsIn(List<Integer> ids) {
+        return eventRepository.findByIdIn(ids);
+    }
+
     private void patchEventFields(Event event, UpdateEventUserRequest updateEventUserRequest) {
         String annotation = updateEventUserRequest.getAnnotation();
         if (annotation != null) {

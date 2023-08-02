@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.mainservice.error.exception.BadRequestException;
+import ru.practicum.mainservice.error.exception.ConflictException;
 import ru.practicum.mainservice.error.exception.NotFoundException;
 import ru.practicum.mainservice.event.dto.EventFullDto;
 import ru.practicum.mainservice.event.dto.EventShortDto;
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
         getUserById(userId);
         Event event = eventService.getEventById(eventId);
         if (event.getState().equals(State.PUBLISHED)) {
-            throw new BadRequestException("Event is already published");
+            throw new ConflictException(String.format("Event id=%s is already published.", eventId));
         }
         return eventService.patchEventByUser(eventId, updateEventUserRequest);
     }

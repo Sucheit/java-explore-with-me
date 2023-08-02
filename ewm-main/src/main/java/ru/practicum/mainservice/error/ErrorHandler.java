@@ -26,7 +26,7 @@ public class ErrorHandler {
         return ApiError.builder()
                 .errors(Arrays.toString(e.getStackTrace()))
                 .reason("Server error.")
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.toString())
                 .timestamp(LocalDateTime.now().format(DATE_TIME_FORMATTER))
                 .build();
     }
@@ -38,7 +38,7 @@ public class ErrorHandler {
                 .errors(Arrays.toString(e.getStackTrace()))
                 .message(e.getMessage())
                 .reason("The required object was not found.")
-                .status(HttpStatus.NOT_FOUND.getReasonPhrase())
+                .status(HttpStatus.NOT_FOUND.toString())
                 .timestamp(LocalDateTime.now().format(DATE_TIME_FORMATTER))
                 .build();
     }
@@ -50,7 +50,7 @@ public class ErrorHandler {
                 .errors(Arrays.toString(e.getStackTrace()))
                 .message(e.getMessage())
                 .reason("Incorrectly made request.")
-                .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .status(HttpStatus.BAD_REQUEST.toString())
                 .timestamp(LocalDateTime.now().format(DATE_TIME_FORMATTER))
                 .build();
     }
@@ -62,7 +62,7 @@ public class ErrorHandler {
                 .errors(Arrays.toString(e.getStackTrace()))
                 .message(e.getMessage())
                 .reason("Incorrectly made request.")
-                .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .status(HttpStatus.CONFLICT.toString())
                 .timestamp(LocalDateTime.now().format(DATE_TIME_FORMATTER))
                 .build();
     }
@@ -74,7 +74,7 @@ public class ErrorHandler {
                 .errors(Arrays.toString(e.getStackTrace()))
                 .message(e.getMessage())
                 .reason("Incorrectly made request.")
-                .status(HttpStatus.CONFLICT.getReasonPhrase())
+                .status(HttpStatus.CONFLICT.toString())
                 .timestamp(LocalDateTime.now().format(DATE_TIME_FORMATTER))
                 .build();
     }
@@ -87,7 +87,7 @@ public class ErrorHandler {
                         e.getFieldError().getField(), e.getMessage(), e.getFieldError().getRejectedValue()))
                 .message(e.getMessage())
                 .reason("Incorrectly made request.")
-                .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .status(HttpStatus.BAD_REQUEST.toString())
                 .timestamp(LocalDateTime.now().format(DATE_TIME_FORMATTER))
                 .build();
     }
@@ -99,7 +99,7 @@ public class ErrorHandler {
                 .errors(String.format("Missing required parameter: %s.", e.getParameterName()))
                 .message(e.getMessage())
                 .reason("Incorrectly made request.")
-                .status(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .status(HttpStatus.BAD_REQUEST.toString())
                 .timestamp(LocalDateTime.now().format(DATE_TIME_FORMATTER))
                 .build();
     }
@@ -111,7 +111,7 @@ public class ErrorHandler {
                 .errors(Arrays.toString(e.getStackTrace()))
                 .message(e.getMessage())
                 .reason("Server error.")
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.toString())
                 .timestamp(LocalDateTime.now().format(DATE_TIME_FORMATTER))
                 .build();
     }
