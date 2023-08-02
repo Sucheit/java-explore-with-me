@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
+import ru.practicum.statsserver.error.BadRequestException;
 import ru.practicum.statsserver.model.EndpointHit;
 import ru.practicum.statsserver.repository.StatisticsRepository;
 
@@ -31,6 +32,9 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public List<ViewStatsDto> getStatistics(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
+        if (start.isAfter(end)) {
+            throw new BadRequestException("Start must be before end.");
+        }
         if (uris == null || uris.isEmpty()) {
             return unique ?
                     statisticsRepository.findViewStatsDtoWithoutUrisAndUniqueIp(start, end) :
