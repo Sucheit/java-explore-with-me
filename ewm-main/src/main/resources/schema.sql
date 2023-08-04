@@ -36,10 +36,12 @@ CREATE TABLE IF NOT EXISTS events
     location_id BIGINT NOT NULL,
     published_on TIMESTAMP WITHOUT TIME ZONE,
     state VARCHAR NOT NULL,
-    CONSTRAINT location_FK FOREIGN KEY (location_id) REFERENCES LOCATIONS(location_id),
-    CONSTRAINT category_FK FOREIGN KEY (category_id) REFERENCES CATEGORIES(category_id),
-    CONSTRAINT user_FK FOREIGN KEY (user_id) REFERENCES USERS(user_id)
+    CONSTRAINT location_FK FOREIGN KEY (location_id) REFERENCES locations(location_id),
+    CONSTRAINT category_FK FOREIGN KEY (category_id) REFERENCES categories(category_id),
+    CONSTRAINT user_FK FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+
+CREATE INDEX IF NOT EXISTS events_user_id_index ON events (user_id);
 
 CREATE TABLE IF NOT EXISTS requests
 (
