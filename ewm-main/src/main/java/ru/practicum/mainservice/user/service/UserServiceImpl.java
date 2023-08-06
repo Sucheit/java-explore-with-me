@@ -149,6 +149,9 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> createSubscription(int userId, int subscribedToId, int from, int size) {
         User user = getUserById(userId);
         User subscribedTo = getUserById(subscribedToId);
+        if (userId == subscribedToId) {
+            throw new ConflictException("You cannot subscribe to yourself.");
+        }
         List<User> subscribedToList = user.getSubscriptions();
         if (subscribedToList.stream()
                 .anyMatch(u -> u.getId() == subscribedToId)) {
