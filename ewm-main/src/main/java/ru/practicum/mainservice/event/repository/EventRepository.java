@@ -13,6 +13,8 @@ public interface EventRepository extends JpaRepository<Event, Integer>, Querydsl
 
     List<Event> findAllByInitiatorId(Integer userId, PageRequest pageRequest);
 
+    List<Event> findAllByInitiatorIdInAndState(List<Integer> userId, State state, PageRequest pageRequest);
+
     Optional<Event> findByIdAndInitiatorId(Integer userId, Integer eventId);
 
     Optional<Event> findByIdAndState(Integer eventId, State state);

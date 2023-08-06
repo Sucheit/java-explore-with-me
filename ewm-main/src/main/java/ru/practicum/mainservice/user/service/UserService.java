@@ -40,4 +40,12 @@ public interface UserService {
     ParticipationRequestDto createParticipationRequest(int userId, int eventId);
 
     ParticipationRequestDto cancelParticipationRequest(int userId, int requestId);
+
+    List<EventShortDto> getSubscriptionsEvents(int userId, int from, int size);
+
+    List<UserDto> createSubscription(int userId, int subscribedToId, int from, int size);
+
+    List<UserDto> getSubscriptions(int userId, int from, int size);
+
+    void deleteSubscription(int userId, int subscribedToId);
 }
