@@ -942,10 +942,31 @@
       ]
     }
   ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
   "variable": [
     {
-      "key": "SubsciberId",
-      "value": "SubscribedTo"
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
     }
   ]
 }
