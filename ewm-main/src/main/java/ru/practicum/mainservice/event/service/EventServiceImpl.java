@@ -176,6 +176,15 @@ public class EventServiceImpl implements EventService {
         return eventRepository.findByIdIn(ids);
     }
 
+    @Override
+    public List<EventShortDto> getSubscribedToEvents(List<Integer> subscribedToIds, int from, int size) {
+        List<Event> events = eventRepository.findAllByInitiatorIdInAndState(subscribedToIds, State.PUBLISHED, getPageRequest(from, size));
+        List<EventFullDto> eventFullDtoList = getEventFullDto(events);
+        return eventFullDtoList.stream()
+                .map(EventMapper::mapEventFullDtoToEventShortDto)
+                .collect(Collectors.toList());
+    }
+
     private void patchEventFields(Event event, UpdateEventUserRequest updateEventUserRequest) {
         String annotation = updateEventUserRequest.getAnnotation();
         if (annotation != null) {

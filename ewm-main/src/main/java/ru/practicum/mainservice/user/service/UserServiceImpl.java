@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.mainservice.error.exception.BadRequestException;
 import ru.practicum.mainservice.error.exception.ConflictException;
 import ru.practicum.mainservice.error.exception.NotFoundException;
 import ru.practicum.mainservice.event.dto.EventFullDto;
@@ -132,6 +133,55 @@ public class UserServiceImpl implements UserService {
     public ParticipationRequestDto cancelParticipationRequest(int userId, int requestId) {
         getUserById(userId);
         return requestService.cancelParticipationRequest(requestId);
+    }
+
+    @Override
+    public List<EventShortDto> getSubscriptionsEvents(int userId, int from, int size) {
+        User user = getUserById(userId);
+        List<User> subscribedTo = user.getSubscriptions();
+        List<Integer> subscribedToIds = subscribedTo.stream()
+                .map(User::getId)
+                .collect(Collectors.toList());
+        return eventService.getSubscribedToEvents(subscribedToIds, from, size);
+    }
+
+    @Override
+    public List<UserDto> createSubscription(int userId, int subscribedToId, int from, int size) {
+        User user = getUserById(userId);
+        User subscribedTo = getUserById(subscribedToId);
+        if (userId == subscribedToId) {
+            throw new ConflictException("You cannot subscribe to yourself.");
+        }
+        List<User> subscribedToList = user.getSubscriptions();
+        if (subscribedToList.stream()
+                .anyMatch(u -> u.getId() == subscribedToId)) {
+            throw new BadRequestException(String.format("User id=%s is already subscribed to user id=%s.", userId, subscribedToId));
+        }
+        subscribedToList.add(subscribedTo);
+        user.setSubscriptions(subscribedToList);
+        userRepository.save(user);
+        return getSubscriptions(userId, from, size);
+    }
+
+    @Override
+    public List<UserDto> getSubscriptions(int userId, int from, int size) {
+        User user = getUserById(userId);
+        List<Integer> subscribedToIds = user.getSubscriptions().stream()
+                .map(User::getId)
+                .collect(Collectors.toList());
+        return getUsers(subscribedToIds, from, size);
+    }
+
+    @Override
+    public void deleteSubscription(int userId, int subscribedToId) {
+        User user = getUserById(userId);
+        User subscribedTo = getUserById(subscribedToId);
+        List<User> subscribedToList = user.getSubscriptions();
+        if (!subscribedToList.remove(subscribedTo)) {
+            throw new BadRequestException(String.format("User id=%s is not subscribed to user id=%s.", userId, subscribedToId));
+        }
+        user.setSubscriptions(subscribedToList);
+        userRepository.save(user);
     }
 
     @Transactional(readOnly = true)

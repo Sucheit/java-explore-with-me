@@ -38,4 +38,6 @@ public interface EventService {
     EventFullDto patchEventByUser(int eventId, UpdateEventUserRequest updateEventUserRequest);
 
     List<Event> findEventByIdsIn(List<Integer> ids);
+
+    List<EventShortDto> getSubscribedToEvents(List<Integer> subscribedToIds, int from, int size);
 }
