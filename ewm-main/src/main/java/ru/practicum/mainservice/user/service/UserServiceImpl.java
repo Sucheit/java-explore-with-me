@@ -135,6 +135,7 @@ public class UserServiceImpl implements UserService {
         return requestService.cancelParticipationRequest(requestId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<EventShortDto> getSubscriptionsEvents(int userId, int from, int size) {
         User user = getUserById(userId);
@@ -145,6 +146,7 @@ public class UserServiceImpl implements UserService {
         return eventService.getSubscribedToEvents(subscribedToIds, from, size);
     }
 
+    @Transactional
     @Override
     public List<UserDto> createSubscription(int userId, int subscribedToId, int from, int size) {
         User user = getUserById(userId);
@@ -163,6 +165,7 @@ public class UserServiceImpl implements UserService {
         return getSubscriptions(userId, from, size);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<UserDto> getSubscriptions(int userId, int from, int size) {
         User user = getUserById(userId);
@@ -172,6 +175,7 @@ public class UserServiceImpl implements UserService {
         return getUsers(subscribedToIds, from, size);
     }
 
+    @Transactional
     @Override
     public void deleteSubscription(int userId, int subscribedToId) {
         User user = getUserById(userId);

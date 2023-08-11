@@ -176,6 +176,7 @@ public class EventServiceImpl implements EventService {
         return eventRepository.findByIdIn(ids);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<EventShortDto> getSubscribedToEvents(List<Integer> subscribedToIds, int from, int size) {
         List<Event> events = eventRepository.findAllByInitiatorIdInAndState(subscribedToIds, State.PUBLISHED, getPageRequest(from, size));
